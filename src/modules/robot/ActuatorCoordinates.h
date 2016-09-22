@@ -5,32 +5,19 @@
       You should have received a copy of the GNU General Public License along with Smoothie. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TOUCHPROBE_H_
-#define TOUCHPROBE_H_
+#pragma once
 
-#include "libs/Module.h"
+#include <array>
 
-class Touchprobe: public Module {
-    private:
-        void wait_for_touch(int distance[]);
-        void flush_log();
+#ifndef MAX_ROBOT_ACTUATORS
+    #ifdef CNC
+    #define MAX_ROBOT_ACTUATORS 3
+    #else
+    // includes 2 extruders
+    #define MAX_ROBOT_ACTUATORS 5
+    #endif
+#endif
 
-        FILE*          logfile;
-        string         filename;
-        StepperMotor*  steppers[3];
-        Pin            pin;
-        unsigned int   debounce_count;
-
-    public:
-        void on_module_loaded();
-        void on_config_reload(void* argument);
-        void on_gcode_received(void* argument);
-        void on_idle(void* argument);
-
-        float         probe_rate;
-        unsigned int   mcode;
-        bool           enabled;
-        bool           should_log;
-};
-
-#endif /* TOUCHPROBE_H_ */
+// Keep MAX_ROBOT_ACTUATORS as small as practical it impacts block size and therefore free memory.
+const size_t k_max_actuators = MAX_ROBOT_ACTUATORS;
+typedef struct std::array<float, k_max_actuators> ActuatorCoordinates;

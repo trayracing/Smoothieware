@@ -7,7 +7,6 @@
  * on    = a block is being executed
  */
 
-#include "KillButton.h"
 #include "modules/robot/Conveyor.h"
 #include "SlowTicker.h"
 #include "Config.h"
@@ -54,7 +53,7 @@ uint32_t PlayLed::led_tick(uint32_t)
 
     if(++cnt >= 6) { // 6 ticks ~ 500ms
         cnt= 0;
-        led.set(!THEKERNEL->conveyor->is_queue_empty());
+        led.set(!THECONVEYOR->is_idle());
     }
 
     return 0;
